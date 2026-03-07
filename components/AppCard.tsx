@@ -39,10 +39,9 @@ export default function AppCard({ app }: AppCardProps) {
               variant="secondary"
               className="text-xs bg-background/80 backdrop-blur-sm flex items-center gap-1"
             >
-              {category?.iconUrl
-                ? <img src={category.iconUrl} alt="" className="w-3 h-3 inline" />
-                : category?.icon
-              }
+              {category?.iconUrl && (
+                <img src={category.iconUrl} alt="" className="w-3 h-3 inline" />
+              )}
               {category?.label}
             </Badge>
           </div>
