@@ -36,7 +36,7 @@ export async function generateMetadata({
 
   if (!app) return {};
 
-  const profiles = app.profiles as { display_name: string | null; username: string } | null;
+  const profiles = app.profiles as unknown as { display_name: string | null; username: string } | null;
   const author = profiles?.display_name ?? profiles?.username ?? '';
   const title = `${app.title} v${app.version}`;
   const description = app.description ?? `${author}が作ったAIアプリ「${app.title}」をダウンロード・レビューしよう`;
