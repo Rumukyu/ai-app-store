@@ -14,9 +14,38 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const siteUrl = 'https://appstore-sage.vercel.app';
+
 export const metadata: Metadata = {
-  title: 'AIAppStore — AIで作ったアプリをシェアしよう',
-  description: 'AIで作成したアプリをアップロード・共有・ダウンロードできるプラットフォーム',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'AIAppStore — AIで作ったアプリをシェアしよう',
+    template: '%s | AIAppStore',
+  },
+  description: 'Claude・ChatGPT・CursorなどのAIツールで作ったアプリを公開・共有・ダウンロードできるプラットフォーム。AIで作ったアプリをシェアしよう。',
+  keywords: ['AIアプリ', 'Claude', 'ChatGPT', 'Cursor', 'AIツール', 'アプリ配布', 'フリーウェア'],
+  authors: [{ name: 'AIAppStore' }],
+  openGraph: {
+    type: 'website',
+    locale: 'ja_JP',
+    url: siteUrl,
+    siteName: 'AIAppStore',
+    title: 'AIAppStore — AIで作ったアプリをシェアしよう',
+    description: 'Claude・ChatGPT・CursorなどのAIツールで作ったアプリを公開・共有・ダウンロードできるプラットフォーム',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AIAppStore' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AIAppStore — AIで作ったアプリをシェアしよう',
+    description: 'Claude・ChatGPT・CursorなどのAIツールで作ったアプリを公開・共有・ダウンロードできるプラットフォーム',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+  },
+  alternates: { canonical: siteUrl },
 };
 
 export default function RootLayout({

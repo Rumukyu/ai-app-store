@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,51 @@ import CommentSection from './CommentSection';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import AppGrid from '@/components/AppGrid';
+
+const siteUrl = 'https://appstore-sage.vercel.app';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createServerSupabaseClient();
+  const { data: app } = await supabase
+    .from('apps')
+    .select('title, description, thumbnail_url, version, profiles!apps_user_id_fkey(display_name, username)')
+    .eq('id', id)
+    .eq('status', 'published')
+    .single();
+
+  if (!app) return {};
+
+  const profiles = app.profiles as { display_name: string | null; username: string } | null;
+  const author = profiles?.display_name ?? profiles?.username ?? '';
+  const title = `${app.title} v${app.version}`;
+  const description = app.description ?? `${author}が作ったAIアプリ「${app.title}」をダウンロード・レビューしよう`;
+  const image = app.thumbnail_url ?? `${siteUrl}/og-image.png`;
+  const url = `${siteUrl}/apps/${id}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'website',
+      url,
+      title,
+      description,
+      images: [{ url: image, width: 1200, height: 630, alt: app.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+    },
+  };
+}
 
 export default async function AppDetailPage({
   params,
